@@ -1,0 +1,26 @@
+{
+  "name": "@near-localnet/faucet-cdk",
+  "version": "1.0.0",
+  "description": "CDK deployment for NEAR Faucet Lambda",
+  "main": "lib/faucet-stack.js",
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy",
+    "diff": "cdk diff",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.130.0",
+    "constructs": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "aws-cdk": "^2.130.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
+

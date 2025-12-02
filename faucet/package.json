@@ -1,0 +1,29 @@
+{
+  "name": "@near-localnet/faucet",
+  "version": "1.0.0",
+  "description": "NEAR Faucet Lambda Handler - Standalone service for distributing tokens on localnet",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.0.0",
+    "near-api-js": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "near",
+    "near-protocol",
+    "faucet",
+    "localnet",
+    "lambda",
+    "aws"
+  ],
+  "license": "MIT"
+}
+

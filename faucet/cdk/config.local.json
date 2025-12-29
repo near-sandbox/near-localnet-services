@@ -1,0 +1,17 @@
+{
+  "aws": {
+    "profile": "shai-sandbox-profile",
+    "region": "us-east-1",
+    "account": "311843862895"
+  },
+  "near": {
+    "rpcUrl": "http://10.0.55.70:3030",
+    "networkId": "localnet",
+    "vpcId": "vpc-0655b93d83acfeda0",
+    "masterAccountId": "node0"
+  },
+  "faucet": {
+    "defaultAmount": "10",
+    "maxAmount": "100"
+  }
+}

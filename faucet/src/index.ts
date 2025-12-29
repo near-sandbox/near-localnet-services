@@ -208,27 +208,41 @@ class NearFaucet {
   }
 }
 
-export const handler = async (event: FaucetEvent): Promise<FaucetResult> => {
+export const handler = async (event: any): Promise<any> => {
   console.log('Faucet Lambda invoked:', JSON.stringify(event));
+
+  // Handle parsing of body if it exists (API Gateway / Function URL event)
+  let payload: FaucetEvent;
+  if (event.body) {
+    try {
+      payload = JSON.parse(event.body);
+    } catch (e) {
+      // If body is already an object or parsing fails, use as is or fail
+      payload = typeof event.body === 'string' ? event.body : event;
+    }
+  } else {
+    // Direct invocation
+    payload = event as FaucetEvent;
+  }
 
   const faucet = new NearFaucet();
   await faucet.initialize();
 
-  if (event.mode === 'single') {
-    if (!event.accountId || !event.amount) {
+  if (payload.mode === 'single') {
+    if (!payload.accountId || !payload.amount) {
       throw new Error('accountId and amount required for single mode');
     }
-    return await faucet.singleTransfer(event.accountId, event.amount);
-  } else if (event.mode === 'batch') {
-    if (!event.accounts || event.accounts.length === 0) {
+    return await faucet.singleTransfer(payload.accountId, payload.amount);
+  } else if (payload.mode === 'batch') {
+    if (!payload.accounts || payload.accounts.length === 0) {
       throw new Error('accounts array required for batch mode');
     }
-    const minAmount = event.minAmount || 1.0;
-    const maxAmount = event.maxAmount || 10.0;
+    const minAmount = payload.minAmount || 1.0;
+    const maxAmount = payload.maxAmount || 10.0;
 
-    return await faucet.batchTransfer(event.accounts, minAmount, maxAmount);
+    return await faucet.batchTransfer(payload.accounts, minAmount, maxAmount);
   } else {
-    throw new Error(`Invalid mode: ${event.mode}`);
+    throw new Error(`Invalid mode: ${payload.mode}`);
   }
 };
 

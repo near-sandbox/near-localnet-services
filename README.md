@@ -1,6 +1,23 @@
 # NEAR Localnet Services
 
+> **Layer 2: NEAR Services** - Essential utility services for localnet development
+
 A collection of standalone services needed to run and manage a NEAR localnet development environment.
+
+## Layer Architecture
+
+This is **Layer 2** of the 5-layer NEAR Localnet Simulator Stack:
+
+```
+Layer 1: NEAR Base                  → AWSNodeRunner
+Layer 2: NEAR Services (this repo)  ← You are here
+Layer 3: Chain Signatures           → cross-chain-simulator  
+Layer 4: Intents Protocol           → near-intents-simulator
+Layer 5: User Applications          → Your dApp
+```
+
+**Depends on**: Layer 1 (NEAR Base) - requires RPC endpoint
+**Provides to higher layers**: Faucet for token distribution, account management utilities
 
 ## Overview
 

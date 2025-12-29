@@ -127,13 +127,14 @@ export class FaucetStack extends cdk.Stack {
     });
 
     // ===== Lambda Function =====
-    const faucetCodePath = path.join(__dirname, '..', '..', 'src');
+    // Use the faucet root directory (contains package.json, src/, and dist/)
+    const faucetRootPath = path.join(__dirname, '..', '..');
     
     this.faucetFunction = new lambda.Function(this, 'FaucetFunction', {
       functionName: 'near-localnet-faucet',
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(faucetCodePath, {
+      code: lambda.Code.fromAsset(faucetRootPath, {
         bundling: {
           image: lambda.Runtime.NODEJS_20_X.bundlingImage,
           command: [
@@ -146,6 +147,36 @@ export class FaucetStack extends cdk.Stack {
               'cd /asset-output && npm install --production',
             ].join(' && '),
           ],
+          // Use local bundling if Docker is not available or fails
+          local: {
+            tryBundle(outputDir: string) {
+              const fs = require('fs');
+              const { execSync } = require('child_process');
+              
+              try {
+                // Build locally
+                execSync('npm install && npm run build', {
+                  cwd: faucetRootPath,
+                  stdio: 'inherit',
+                });
+                
+                // Copy built files to output
+                const distPath = path.join(faucetRootPath, 'dist');
+                if (fs.existsSync(distPath)) {
+                  execSync(`cp -r ${distPath}/* ${outputDir}/`, { stdio: 'inherit' });
+                }
+                
+                // Copy package.json and install production deps
+                execSync(`cp ${faucetRootPath}/package.json ${outputDir}/`, { stdio: 'inherit' });
+                execSync('npm install --production', { cwd: outputDir, stdio: 'inherit' });
+                
+                return true;
+              } catch (error) {
+                console.error('Local bundling failed:', error);
+                return false;
+              }
+            },
+          },
         },
       }),
       timeout: cdk.Duration.seconds(300), // 5 minutes for batch operations

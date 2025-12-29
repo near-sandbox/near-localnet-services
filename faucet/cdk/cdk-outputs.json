@@ -1,0 +1,6 @@
+{
+  "near-localnet-faucet": {
+    "FaucetFunctionArn": "arn:aws:lambda:us-east-1:311843862895:function:near-localnet-faucet",
+    "FaucetFunctionName": "near-localnet-faucet"
+  }
+}

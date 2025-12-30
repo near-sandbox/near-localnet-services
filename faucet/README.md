@@ -25,25 +25,27 @@ The NEAR Faucet service sends NEAR tokens from a master account to user wallets 
 
 Before deploying, you need to store the master account credentials in AWS SSM Parameter Store:
 
-### 1. Store Master Account ID
+### 1. Store Localnet Account ID
 
 ```bash
 aws ssm put-parameter \
-  --name "/near-localnet/master-account-id" \
-  --value "node0" \
+  --name "/near-localnet/localnet-account-id" \
+  --value "localnet" \
   --type "String" \
   --profile ${AWS_PROFILE}
 ```
 
-### 2. Store Master Account Private Key
+### 2. Store Localnet Account Private Key
 
 ```bash
 aws ssm put-parameter \
-  --name "/near-localnet/master-account-key" \
+  --name "/near-localnet/localnet-account-key" \
   --value "ed25519:YOUR_PRIVATE_KEY_HERE" \
   --type "SecureString" \
   --profile ${AWS_PROFILE}
 ```
+
+**Note:** The localnet account keypair is automatically generated and stored in SSM by Layer 1 (NEAR Base) during deployment. You typically don't need to manually create these parameters.
 
 **Note:** The private key should be in the format `ed25519:...` as exported by NEAR CLI or near-api-js.
 
@@ -86,8 +88,8 @@ If you're using different SSM parameter names:
 
 ```bash
 cdk deploy \
-  --context ssmMasterAccountIdParam=/custom/path/master-account-id \
-  --context ssmMasterAccountKeyParam=/custom/path/master-account-key
+  --context ssmLocalnetAccountIdParam=/custom/path/localnet-account-id \
+  --context ssmLocalnetAccountKeyParam=/custom/path/localnet-account-key
 ```
 
 ## Usage
@@ -228,8 +230,8 @@ The Lambda function uses the following environment variables (configured via CDK
 
 - `NEAR_NETWORK`: Network ID (default: `localnet`)
 - `NEAR_NODE_URL`: NEAR RPC endpoint URL (default: `http://localhost:3030`)
-- `SSM_MASTER_ACCOUNT_ID_PARAM`: SSM parameter name for master account ID (default: `/near-localnet/master-account-id`)
-- `SSM_MASTER_ACCOUNT_KEY_PARAM`: SSM parameter name for master account key (default: `/near-localnet/master-account-key`)
+- `SSM_LOCALNET_ACCOUNT_ID_PARAM`: SSM parameter name for localnet account ID (default: `/near-localnet/localnet-account-id`)
+- `SSM_LOCALNET_ACCOUNT_KEY_PARAM`: SSM parameter name for localnet account key (default: `/near-localnet/localnet-account-key`)
 
 ## Architecture
 
@@ -239,7 +241,7 @@ The Lambda function uses the following environment variables (configured via CDK
 │  Function   │
 └──────┬──────┘
        │
-       ├───> SSM Parameter Store (Master Account Key)
+       ├───> SSM Parameter Store (Localnet Account Key)
        │
        ├───> NEAR RPC Node (via VPC)
        │
@@ -284,8 +286,8 @@ If the Lambda cannot reach the NEAR node:
 ### Transaction Failures
 
 Common causes:
-- Insufficient balance in master account
-- Invalid NEAR account ID format
+- Insufficient balance in localnet account
+- Invalid NEAR account ID format (must be `*.localnet` for localnet)
 - NEAR node not responding
 - Network connectivity issues
 

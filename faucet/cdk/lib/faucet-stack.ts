@@ -23,14 +23,14 @@ export interface FaucetStackProps extends cdk.StackProps {
   nearNodeUrl?: string;
 
   /**
-   * SSM parameter name for master account ID. Defaults to /near-localnet/master-account-id
+   * SSM parameter name for localnet account ID. Defaults to /near-localnet/localnet-account-id
    */
-  ssmMasterAccountIdParam?: string;
+  ssmLocalnetAccountIdParam?: string;
 
   /**
-   * SSM parameter name for master account key. Defaults to /near-localnet/master-account-key
+   * SSM parameter name for localnet account key. Defaults to /near-localnet/localnet-account-key
    */
-  ssmMasterAccountKeyParam?: string;
+  ssmLocalnetAccountKeyParam?: string;
 }
 
 export class FaucetStack extends cdk.Stack {
@@ -113,8 +113,8 @@ export class FaucetStack extends cdk.Stack {
           'ssm:GetParameters',
         ],
         resources: [
-          `arn:aws:ssm:${this.region}:${this.account}:parameter${props.ssmMasterAccountIdParam || '/near-localnet/master-account-id'}`,
-          `arn:aws:ssm:${this.region}:${this.account}:parameter${props.ssmMasterAccountKeyParam || '/near-localnet/master-account-key'}`,
+          `arn:aws:ssm:${this.region}:${this.account}:parameter${props.ssmLocalnetAccountIdParam || '/near-localnet/localnet-account-id'}`,
+          `arn:aws:ssm:${this.region}:${this.account}:parameter${props.ssmLocalnetAccountKeyParam || '/near-localnet/localnet-account-key'}`,
         ],
       })
     );
@@ -188,8 +188,8 @@ export class FaucetStack extends cdk.Stack {
       environment: {
         NEAR_NETWORK: 'localnet',
         NEAR_NODE_URL: props.nearNodeUrl || 'http://localhost:3030',
-        SSM_MASTER_ACCOUNT_ID_PARAM: props.ssmMasterAccountIdParam || '/near-localnet/master-account-id',
-        SSM_MASTER_ACCOUNT_KEY_PARAM: props.ssmMasterAccountKeyParam || '/near-localnet/master-account-key',
+        SSM_LOCALNET_ACCOUNT_ID_PARAM: props.ssmLocalnetAccountIdParam || '/near-localnet/localnet-account-id',
+        SSM_LOCALNET_ACCOUNT_KEY_PARAM: props.ssmLocalnetAccountKeyParam || '/near-localnet/localnet-account-key',
       },
       logGroup,
       loggingFormat: lambda.LoggingFormat.JSON,

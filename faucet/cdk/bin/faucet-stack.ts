@@ -13,8 +13,8 @@ const region = app.node.tryGetContext('region') || process.env.CDK_DEFAULT_REGIO
 const vpcId = app.node.tryGetContext('vpcId');
 const securityGroupId = app.node.tryGetContext('securityGroupId');
 const nearNodeUrl = app.node.tryGetContext('nearNodeUrl') || process.env.NEAR_NODE_URL;
-const ssmMasterAccountIdParam = app.node.tryGetContext('ssmMasterAccountIdParam') || '/near-localnet/master-account-id';
-const ssmMasterAccountKeyParam = app.node.tryGetContext('ssmMasterAccountKeyParam') || '/near-localnet/master-account-key';
+const ssmLocalnetAccountIdParam = app.node.tryGetContext('ssmLocalnetAccountIdParam') || '/near-localnet/localnet-account-id';
+const ssmLocalnetAccountKeyParam = app.node.tryGetContext('ssmLocalnetAccountKeyParam') || '/near-localnet/localnet-account-key';
 
 new FaucetStack(app, 'NearFaucetStack', {
   stackName: 'near-localnet-faucet-v2',
@@ -26,8 +26,8 @@ new FaucetStack(app, 'NearFaucetStack', {
   vpcId,
   securityGroupId,
   nearNodeUrl,
-  ssmMasterAccountIdParam,
-  ssmMasterAccountKeyParam,
+  ssmLocalnetAccountIdParam,
+  ssmLocalnetAccountKeyParam,
 });
 
 app.synth();

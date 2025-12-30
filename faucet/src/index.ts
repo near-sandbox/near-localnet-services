@@ -24,39 +24,39 @@ const ssmClient = new SSMClient({});
 
 const NETWORK_ID = process.env.NEAR_NETWORK || 'localnet';
 const NODE_URL = process.env.NEAR_NODE_URL || 'http://localhost:3030';
-const SSM_MASTER_ACCOUNT_ID_PARAM = process.env.SSM_MASTER_ACCOUNT_ID_PARAM || '/near-localnet/master-account-id';
-const SSM_MASTER_ACCOUNT_KEY_PARAM = process.env.SSM_MASTER_ACCOUNT_KEY_PARAM || '/near-localnet/master-account-key';
+const SSM_LOCALNET_ACCOUNT_ID_PARAM = process.env.SSM_LOCALNET_ACCOUNT_ID_PARAM || '/near-localnet/localnet-account-id';
+const SSM_LOCALNET_ACCOUNT_KEY_PARAM = process.env.SSM_LOCALNET_ACCOUNT_KEY_PARAM || '/near-localnet/localnet-account-key';
 
 class NearFaucet {
   private near: nearAPI.Near | null = null;
   private masterAccount: nearAPI.Account | null = null;
-  private masterAccountId: string = 'node0';
+  private masterAccountId: string = 'localnet';
 
   async initialize(): Promise<void> {
     console.log('Initializing NEAR connection...');
 
-    // Get master account ID from SSM
+    // Get localnet account ID from SSM
     try {
       const accountIdParam = await ssmClient.send(
         new GetParameterCommand({
-          Name: SSM_MASTER_ACCOUNT_ID_PARAM,
+          Name: SSM_LOCALNET_ACCOUNT_ID_PARAM,
         })
       );
-      this.masterAccountId = accountIdParam.Parameter?.Value || 'node0';
+      this.masterAccountId = accountIdParam.Parameter?.Value || 'localnet';
     } catch (error) {
-      console.log(`Using default master account ID: node0 (SSM param ${SSM_MASTER_ACCOUNT_ID_PARAM} not found)`);
+      console.log(`Using default master account ID: localnet (SSM param ${SSM_LOCALNET_ACCOUNT_ID_PARAM} not found)`);
     }
 
-    // Get master account private key from SSM
+    // Get localnet account private key from SSM
     const keyParam = await ssmClient.send(
       new GetParameterCommand({
-        Name: SSM_MASTER_ACCOUNT_KEY_PARAM,
+        Name: SSM_LOCALNET_ACCOUNT_KEY_PARAM,
         WithDecryption: true,
       })
     );
 
     if (!keyParam.Parameter?.Value) {
-      throw new Error(`Master account key not found in SSM at ${SSM_MASTER_ACCOUNT_KEY_PARAM}`);
+      throw new Error(`Localnet account key not found in SSM at ${SSM_LOCALNET_ACCOUNT_KEY_PARAM}`);
     }
 
     const privateKeyString = keyParam.Parameter.Value;

@@ -4,29 +4,31 @@
       "layer_name": "near_base",
       "deployed": true,
       "outputs": {
-        "rpc_url": "http://10.0.55.70:3030",
+        "rpc_url": "http://10.0.13.20:3030",
         "network_id": "localnet",
-        "vpc_id": "vpc-0655b93d83acfeda0",
         "instance_id": "i-04e50891ed0111b73",
-        "rpc_ip": "10.0.55.70",
-        "access_status": "secured",
-        "security_note": "Network isolation is working correctly"
+        "private_ip": "10.0.13.20",
+        "rpc_ip": "10.0.13.20",
+        "vpc_id": "vpc-0655b93d83acfeda0",
+        "security_group_id": "sg-0ebe68c6934643700",
+        "node_type": "m7a.2xlarge",
+        "near_version": "2.10.1"
       },
-      "timestamp": "2025-12-30T00:48:55.025Z"
+      "timestamp": "2025-12-30T04:16:54.424Z"
     },
     "near_services": {
       "layer_name": "near_services",
       "deployed": true,
       "outputs": {
         "deployed": "true",
-        "deploy_timestamp": "2025-12-30T00:54:18.333Z",
+        "deploy_timestamp": "2025-12-30T04:18:54.886Z",
         "faucet_endpoint": "",
         "faucet_lambda_arn": "",
-        "near_rpc_url": "http://10.0.55.70:3030"
+        "near_rpc_url": "http://10.0.13.20:3030"
       },
-      "timestamp": "2025-12-30T00:54:18.333Z"
+      "timestamp": "2025-12-30T04:18:54.886Z"
     }
   },
-  "timestamp": "2025-12-30T00:54:18.334Z",
+  "timestamp": "2025-12-30T04:18:54.886Z",
   "version": "1.0.0"
 }

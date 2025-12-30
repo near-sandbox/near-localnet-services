@@ -1,5 +1,7 @@
 # Layer 2: NEAR Services - Complete with Core Contracts
 
+> IMPORTANT: This repo’s canonical Faucet documentation is `faucet/README.md`.
+
 ## Overview
 Layer 2 provides essential utility services for NEAR localnet development, mirroring testnet/mainnet capabilities.
 
@@ -13,7 +15,7 @@ Layer 2 provides essential utility services for NEAR localnet development, mirro
 - `sendMoney` mode: Fund existing accounts
 - `createAccount` mode: Create and fund new accounts
 - Supports implicit accounts (hex addresses)
-- Supports named sub-accounts (`alice.node0`)
+- Supports named accounts (`alice.localnet`)
 
 **Integration**: Lambda deployed in Layer 1 VPC for private RPC access
 
@@ -22,9 +24,9 @@ Deployed from [near/core-contracts](https://github.com/near/core-contracts) usin
 
 | Contract | Account | Purpose | Tx Hash |
 |----------|---------|---------|---------|
-| w-near | `wrap.node0` | Wrapped NEAR token | `HbCfpeGdS...` |
-| whitelist | `whitelist.node0` | Staking pool whitelist | `y3jerdWEa...` |
-| staking-pool-factory | `poolv1.node0` | Validator delegation | `D1viGU6u3...` |
+| w-near | `wrap.localnet` | Wrapped NEAR token | (verify after deploy) |
+| whitelist | `whitelist.localnet` | Staking pool whitelist | (verify after deploy) |
+| staking-pool-factory | `poolv1.localnet` | Validator delegation | (verify after deploy) |
 
 ## Parity Status
 
@@ -35,17 +37,11 @@ Deployed from [near/core-contracts](https://github.com/near/core-contracts) usin
 - Contract deployment capability
 - Latest NEAR tech (no downgrades)
 
-### ⚠️ Naming Limitation
-**Current**: Can create `alice.node0` (sub-account of master)
-**Desired**: Create `alice.localnet` (like `alice.testnet`)
-
-**Why**: `localnet` root account doesn't exist on chain. Only `node0`, `node1`, etc. exist (from `nearup` genesis).
-
-**Solution** (To be implemented):
-1. Create `localnet` root account using `node0`
-2. Store `localnet` key in SSM  
-3. Update Faucet to use `localnet` key for account creation
-4. Result: Developers can create `alice.localnet`, `bob.localnet`, etc.
+### Naming Parity
+This stack targets `.localnet` naming parity (like testnet’s `.testnet`):
+- Root account: `localnet` (added via Layer 1 genesis modification)
+- Faucet uses `localnet` key from SSM
+- Result: `alice.localnet`, `bob.localnet`, etc.
 
 ## Deployment Process
 
@@ -66,10 +62,10 @@ The orchestrator automatically:
 # Test Faucet
 curl -X POST "https://ee4nn4wyjwxn3wpewkdlp62iia0aqoua.lambda-url.us-east-1.on.aws/" \
   -H "Content-Type: application/json" \
-  -d '{"mode": "createAccount", "accountId": "test.node0", "publicKey": "ed25519:...", "amount": "10"}'
+  -d '{"mode": "createAccount", "accountId": "test.localnet", "publicKey": "ed25519:...", "amount": "10"}'
 
 # Verify contracts (requires SSM tunnel or VPC access)
-curl http://localhost:3030 -d '{"jsonrpc":"2.0","id":"1","method":"query","params":{"request_type":"view_account","finality":"final","account_id":"wrap.node0"}}'
+curl http://localhost:3030 -d '{"jsonrpc":"2.0","id":"1","method":"query","params":{"request_type":"view_account","finality":"final","account_id":"wrap.localnet"}}'
 ```
 
 ## Next Steps

@@ -97,21 +97,21 @@ Or set environment variable:
 export AWS_PROFILE=your-profile-name
 ```
 
-### SSM Parameter Setup
+### SSM Parameter Setup (updated: `.localnet`)
 
 Before deploying the faucet, set up SSM parameters:
 
 ```bash
-# Set master account ID
+# Set localnet account ID
 aws ssm put-parameter \
-  --name "/near-localnet/master-account-id" \
-  --value "node0" \
+  --name "/near-localnet/localnet-account-id" \
+  --value "localnet" \
   --type "String" \
   --profile ${AWS_PROFILE}
 
-# Set master account key (replace with your actual key)
+# Set localnet account key (replace with your actual key)
 aws ssm put-parameter \
-  --name "/near-localnet/master-account-key" \
+  --name "/near-localnet/localnet-account-key" \
   --value "ed25519:YOUR_PRIVATE_KEY_HERE" \
   --type "SecureString" \
   --profile ${AWS_PROFILE}

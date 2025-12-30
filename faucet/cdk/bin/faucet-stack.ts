@@ -5,9 +5,9 @@ import { FaucetStack } from '../lib/faucet-stack';
 
 const app = new cdk.App();
 
-// Get environment variables
-const accountId = process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID;
-const region = process.env.CDK_DEFAULT_REGION || process.env.AWS_REGION || 'us-east-1';
+// Get environment variables or context
+const accountId = app.node.tryGetContext('accountId') || process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID;
+const region = app.node.tryGetContext('region') || process.env.CDK_DEFAULT_REGION || process.env.AWS_REGION || 'us-east-1';
 
 // Get configuration from context or environment
 const vpcId = app.node.tryGetContext('vpcId');
@@ -17,7 +17,7 @@ const ssmMasterAccountIdParam = app.node.tryGetContext('ssmMasterAccountIdParam'
 const ssmMasterAccountKeyParam = app.node.tryGetContext('ssmMasterAccountKeyParam') || '/near-localnet/master-account-key';
 
 new FaucetStack(app, 'NearFaucetStack', {
-  stackName: 'near-localnet-faucet',
+  stackName: 'near-localnet-faucet-v2',
   env: {
     account: accountId,
     region: region,

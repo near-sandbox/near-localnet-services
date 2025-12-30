@@ -16,7 +16,7 @@
 
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 import * as nearAPI from 'near-api-js';
-import { KeyPair, keyStores, connect } from 'near-api-js';
+import { KeyPair, keyStores, connect, utils } from 'near-api-js';
 import { parseNearAmount } from 'near-api-js/lib/utils/format';
 import { FaucetEvent, FaucetResult, FaucetTransfer } from './types';
 
@@ -93,6 +93,20 @@ class NearFaucet {
     }
 
     const result = await this.masterAccount.sendMoney(toAccountId, BigInt(amount));
+    return result.transaction.hash;
+  }
+
+  async createAccount(newAccountId: string, publicKey: string, amountInNear: string): Promise<string> {
+    if (!this.masterAccount) {
+      throw new Error('Master account not initialized');
+    }
+
+    const amount = parseNearAmount(amountInNear);
+    if (!amount) {
+      throw new Error(`Invalid amount: ${amountInNear}`);
+    }
+
+    const result = await this.masterAccount.createAccount(newAccountId, utils.PublicKey.from(publicKey), BigInt(amount));
     return result.transaction.hash;
   }
 
@@ -241,6 +255,49 @@ export const handler = async (event: any): Promise<any> => {
     const maxAmount = payload.maxAmount || 10.0;
 
     return await faucet.batchTransfer(payload.accounts, minAmount, maxAmount);
+  } else if (payload.mode === 'createAccount') {
+    if (!payload.accountId || !payload.publicKey || !payload.amount) {
+      throw new Error('accountId, publicKey, and amount required for createAccount mode');
+    }
+    
+    // Create the account
+    try {
+      const txHash = await faucet.createAccount(payload.accountId, payload.publicKey, payload.amount);
+      return {
+        success: true,
+        mode: 'createAccount',
+        transfers: [{
+          account: payload.accountId,
+          amount: payload.amount,
+          txHash: txHash,
+          success: true
+        }],
+        summary: {
+          totalSelected: 1,
+          successful: 1,
+          failed: 0,
+          totalSent: payload.amount
+        }
+      };
+    } catch (error: any) {
+      console.error('Create account failed:', error);
+      return {
+        success: false,
+        mode: 'createAccount',
+        transfers: [{
+          account: payload.accountId,
+          amount: payload.amount,
+          success: false,
+          error: error.message
+        }],
+        summary: {
+          totalSelected: 1,
+          successful: 0,
+          failed: 1,
+          totalSent: '0'
+        }
+      };
+    }
   } else {
     throw new Error(`Invalid mode: ${payload.mode}`);
   }

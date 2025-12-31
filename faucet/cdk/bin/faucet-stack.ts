@@ -20,7 +20,8 @@ new FaucetStack(app, 'NearFaucetStack', {
   // NOTE: v2 may be stuck in DELETE_IN_PROGRESS due to Lambda VPC ENI cleanup.
   // Bump the stack name to allow fresh deployments while v2 finishes deleting.
   // v3 may also be stuck in DELETE_IN_PROGRESS from a previous rollback.
-  stackName: 'near-localnet-faucet-v4',
+  // v4 may also be stuck in DELETE_IN_PROGRESS from a previous rollback.
+  stackName: 'near-localnet-faucet-v5',
   env: {
     account: accountId,
     region: region,

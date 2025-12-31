@@ -2,7 +2,6 @@ import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 import * as path from 'path';
 
@@ -119,12 +118,12 @@ export class FaucetStack extends cdk.Stack {
       })
     );
 
-    // ===== CloudWatch Log Group =====
-    const logGroup = new logs.LogGroup(this, 'FaucetLogGroup', {
-      logGroupName: '/aws/lambda/near-localnet-faucet',
-      retention: logs.RetentionDays.ONE_WEEK,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
+    // ===== CloudWatch Logs =====
+    // NOTE: Do NOT explicitly create `/aws/lambda/near-localnet-faucet` here.
+    // During iterative deployments we may have a previous stack in DELETE_IN_PROGRESS
+    // (Lambda VPC ENI cleanup) that still "owns" the log group resource, which would
+    // cause new stacks to fail with AlreadyExists. Lambda will create the log group
+    // automatically on first invocation if it doesn't exist.
 
     // ===== Lambda Function =====
     // Use the faucet root directory (contains package.json, src/, and dist/)
@@ -191,7 +190,6 @@ export class FaucetStack extends cdk.Stack {
         SSM_LOCALNET_ACCOUNT_ID_PARAM: props.ssmLocalnetAccountIdParam || '/near-localnet/localnet-account-id',
         SSM_LOCALNET_ACCOUNT_KEY_PARAM: props.ssmLocalnetAccountKeyParam || '/near-localnet/localnet-account-key',
       },
-      logGroup,
       loggingFormat: lambda.LoggingFormat.JSON,
     });
 

@@ -17,7 +17,9 @@ const ssmLocalnetAccountIdParam = app.node.tryGetContext('ssmLocalnetAccountIdPa
 const ssmLocalnetAccountKeyParam = app.node.tryGetContext('ssmLocalnetAccountKeyParam') || '/near-localnet/localnet-account-key';
 
 new FaucetStack(app, 'NearFaucetStack', {
-  stackName: 'near-localnet-faucet-v2',
+  // NOTE: v2 may be stuck in DELETE_IN_PROGRESS due to Lambda VPC ENI cleanup.
+  // Bump the stack name to allow fresh deployments while v2 finishes deleting.
+  stackName: 'near-localnet-faucet-v3',
   env: {
     account: accountId,
     region: region,

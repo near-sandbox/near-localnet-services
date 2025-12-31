@@ -19,7 +19,8 @@ const ssmLocalnetAccountKeyParam = app.node.tryGetContext('ssmLocalnetAccountKey
 new FaucetStack(app, 'NearFaucetStack', {
   // NOTE: v2 may be stuck in DELETE_IN_PROGRESS due to Lambda VPC ENI cleanup.
   // Bump the stack name to allow fresh deployments while v2 finishes deleting.
-  stackName: 'near-localnet-faucet-v3',
+  // v3 may also be stuck in DELETE_IN_PROGRESS from a previous rollback.
+  stackName: 'near-localnet-faucet-v4',
   env: {
     account: accountId,
     region: region,

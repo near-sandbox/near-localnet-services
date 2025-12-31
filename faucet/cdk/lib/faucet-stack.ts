@@ -130,7 +130,6 @@ export class FaucetStack extends cdk.Stack {
     const faucetRootPath = path.join(__dirname, '..', '..');
     
     this.faucetFunction = new lambda.Function(this, 'FaucetFunction', {
-      functionName: 'near-localnet-faucet',
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset(faucetRootPath, {

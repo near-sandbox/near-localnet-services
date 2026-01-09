@@ -1,0 +1,79 @@
+---
+alwaysApply: true
+description: Layer 2 entry rule - NEAR Localnet Services for utility functions
+---
+
+# Layer 2: NEAR Services - Entry Rule
+
+**Essential utility services for NEAR localnet development**
+
+## Layer Position
+
+```
+Layer 1: NEAR Base          → AWSNodeRunner
+Layer 2: NEAR Services      → This repository ← YOU ARE HERE
+Layer 3: Chain Signatures   → cross-chain-simulator (includes MPC)
+Layer 4: Intents Protocol   → near-intents-simulator
+Layer 5: User Applications  → Your dApp
+```
+
+**Depends on**: Layer 1 (NEAR Base) - requires RPC endpoint
+**Provides to**: All higher layers - faucet, utilities
+
+## Services
+
+### Faucet Service (Active)
+- Lambda-based token distribution
+- Location: `faucet/`
+- Deployment: AWS CDK (`faucet/cdk`)
+- Features: Single/batch transfers, SSM key management
+
+### Future Services
+- Gas Payer - Pay gas fees for users
+- Account Management - Helper utilities
+- Monitoring - Health checks
+
+## Deployment
+
+```bash
+# Via Orchestrator
+cd /near-localnet-orchestrator
+npx near-orchestrator deploy near_base near_services
+
+# Standalone
+cd faucet/cdk
+npm install
+npm run deploy  # Uses --profile shai-sandbox-profile
+```
+
+## Outputs
+
+```typescript
+{
+  faucet_endpoint: "https://xxx.execute-api.us-east-1.amazonaws.com/prod",
+  faucet_lambda_arn: "arn:aws:lambda:us-east-1:xxx:function:faucet"
+}
+```
+
+## Repository Structure
+
+```
+near-localnet-services/
+├── faucet/
+│   ├── cdk/          # CDK deployment
+│   ├── src/          # Lambda handler
+│   └── README.md
+└── README.md
+```
+
+## Key Notes
+
+1. **Required Layer**: Not optional - simplifies architecture
+2. **Depends on Layer 1**: Must deploy NEAR Base first
+3. **Lambda-based**: Serverless, ~$5-10/month
+4. **VPC-aware**: Connects to NEAR node in VPC
+
+## Troubleshooting
+
+See `near-localnet-orchestrator/docs/lessons-learned/NEAR_LOCALNET_LESSONS_LEARNED.md`:
+- GOTCHA #7-9: Layer 2 specific (VPC deployment, faucet versioning, naming)

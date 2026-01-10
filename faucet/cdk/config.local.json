@@ -5,9 +5,9 @@
     "account": "311843862895"
   },
   "near": {
-    "rpcUrl": "http://10.0.33.4:3030",
+    "rpcUrl": "http://10.0.1.12:3030",
     "networkId": "localnet",
-    "vpcId": "vpc-00241e8a39da08263",
+    "vpcId": "vpc-0eede65ab241b366f",
     "masterAccountId": "localnet"
   },
   "faucet": {

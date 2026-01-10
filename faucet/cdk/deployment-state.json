@@ -4,31 +4,32 @@
       "layer_name": "near_base",
       "deployed": true,
       "outputs": {
-        "rpc_url": "http://10.0.13.20:3030",
+        "rpc_url": "http://10.0.1.12:3030",
         "network_id": "localnet",
-        "instance_id": "i-04e50891ed0111b73",
-        "private_ip": "10.0.13.20",
-        "rpc_ip": "10.0.13.20",
-        "vpc_id": "vpc-0655b93d83acfeda0",
-        "security_group_id": "sg-0ebe68c6934643700",
+        "instance_id": "i-0cd31695b2fae55bc",
+        "private_ip": "10.0.1.12",
+        "rpc_ip": "10.0.1.12",
+        "vpc_id": "vpc-0eede65ab241b366f",
+        "security_group_id": "sg-053be2ef0afa83493",
         "node_type": "m7a.2xlarge",
         "near_version": "2.10.1"
       },
-      "timestamp": "2025-12-30T04:16:54.424Z"
+      "timestamp": "2026-01-09T20:17:23.466Z"
     },
     "near_services": {
       "layer_name": "near_services",
       "deployed": true,
       "outputs": {
         "deployed": "true",
-        "deploy_timestamp": "2025-12-30T04:18:54.886Z",
+        "deploy_timestamp": "2026-01-09T20:26:54.260Z",
         "faucet_endpoint": "",
-        "faucet_lambda_arn": "",
-        "near_rpc_url": "http://10.0.13.20:3030"
+        "faucet_lambda_arn": "arn:aws:lambda:us-east-1:311843862895:function:near-localnet-faucet-v6-FaucetFunction0A265281-aF7rICg6mtIO",
+        "faucet_function_name": "near-localnet-faucet-v6-FaucetFunction0A265281-aF7rICg6mtIO",
+        "near_rpc_url": "http://10.0.1.12:3030"
       },
-      "timestamp": "2025-12-30T04:18:54.886Z"
+      "timestamp": "2026-01-09T20:26:54.260Z"
     }
   },
-  "timestamp": "2025-12-30T04:18:54.886Z",
+  "timestamp": "2026-01-09T20:26:54.260Z",
   "version": "1.0.0"
 }
